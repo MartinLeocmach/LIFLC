@@ -184,8 +184,22 @@ end.
 *)
 Theorem comp_option_nat_seulement_si (x : option nat) (y : option nat) : comp_option_nat x y = true -> x = y.
 Proof.
-intro.
-induction x as [Some n | n].
+induction x.
+-induction y.
++intro h0.
+pose (beq_nat_true a0 a1) as h1.
+destruct h1.
+rewrite <- h0.
+reflexivity.
+reflexivity.
++intro h0.
+discriminate.
+-induction y.
++intro h0.
+pose (beq_nat_true a0) as h1.
+discriminate.
++intro h0.
+reflexivity.
 Qed.
 
 
@@ -198,6 +212,11 @@ Qed.
 (* La définition de plus est récursive sur le paramètre de gauche, donc pas de problème ici, c'est juste un calcul (simpl) *)
 Lemma plus_Z_l (x : nat) : plus 0 x = x.
 Proof.
+induction x.
+-simpl.
+reflexivity.
+-simpl.
+reflexivity.
 Qed. 
 
 (* Exercice : montrer que la fonction plus appliquée un x quelconque et 0 retourne x. *)
@@ -205,6 +224,11 @@ Qed.
 (* on utilise "induction x as..." qui invoque la règle nat_ind. *)
 Lemma plus_Z_r (x : nat) : plus x 0 = x.
 Proof.
+induction x as [ | n].
+-reflexivity.
+-simpl.
+rewrite -> IHn.
+reflexivity.
 Qed. 
 
 
@@ -213,10 +237,12 @@ Qed.
 (* FONCTIONS RECURSIVES ET INDUCTION SUR LES LISTES                           *)
 (******************************************************************************)
 
-
 (* Exercice *)
 (* Définir "concat" la fonction de concaténation de deux listes l1 et l2 (par récursion sur l1) *)
 Fixpoint concat (l1 l2 : nlist) : nlist := (* écrire votre code ici *)
+  match l1 with
+  | [] => l2
+  | n::l11 => n::(concat l11 l2)
   end.
 
 (* On note ++ en notation infix pour la concatenation *)
@@ -233,6 +259,13 @@ Fixpoint length (l : nlist) : nat :=
    est vide *)
 Lemma length_zero_seulement_si_vide (l : nlist) : length l = 0 -> l=[].
 Proof.
+intro h0.
+induction l as [ | l1 H1].
+-reflexivity.
+-destruct IHH1.
++rewrite <- h0.
+discriminate.
++discriminate.
 Qed.
 
 
@@ -242,6 +275,12 @@ deux listes quelconques l1 l2 retourne la somme des applications de
 cette fonction à chacune des deux listes.*)
 Lemma length_of_concat (l1 : nlist) (l2 : nlist) : length (l1 ++ l2) = length l1 + length l2.
 Proof.
+induction l1 as [ | l10 H1].
+-simpl.
+reflexivity.
+-simpl.
+rewrite -> IHH1.
+reflexivity.
 Qed.
 
 
@@ -257,7 +296,7 @@ Proof.
   intro un_element_general.
   intro une_liste_generale.
   intro Habsurde.
-  (* poursuivre la preuve *)
+    (* poursuivre la preuve *)
 Qed.
 
 
