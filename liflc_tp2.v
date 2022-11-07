@@ -212,10 +212,7 @@ Qed.
 (* La définition de plus est récursive sur le paramètre de gauche, donc pas de problème ici, c'est juste un calcul (simpl) *)
 Lemma plus_Z_l (x : nat) : plus 0 x = x.
 Proof.
-induction x.
--simpl.
-reflexivity.
--simpl.
+simpl.
 reflexivity.
 Qed. 
 
@@ -260,9 +257,9 @@ Fixpoint length (l : nlist) : nat :=
 Lemma length_zero_seulement_si_vide (l : nlist) : length l = 0 -> l=[].
 Proof.
 intro h0.
-induction l as [ | l1 H1].
+induction l as [ | n l1].
 -reflexivity.
--destruct IHH1.
+-destruct IHl1.
 +rewrite <- h0.
 discriminate.
 +discriminate.
@@ -297,6 +294,7 @@ Proof.
   intro une_liste_generale.
   intro Habsurde.
     (* poursuivre la preuve *)
+  discriminate.
 Qed.
 
 
@@ -306,13 +304,23 @@ l2, ajouter x en tête de la concaténation de l1 et l2 est
 la même chose que concaténer l1 avec x en tête et l2. *)
 (* pas de difficulté, c'est juste un pas de calcul (simpl). *)
 
-Lemma concat_cons : False
+Lemma concat_cons : forall (x:nat), forall (l1:nlist), forall (l2:nlist), concat (x::l1) l2 = x::concat l1 l2 -> True.
 Proof.
+intro x.
+intro l1.
+intro l2.
+simpl.
+reflexivity.
 Qed.
 
 (* Eprimer et montrer maintenant que pour toute liste l1, concaténer à l1 la liste vide renvoie exactement la liste l1. *)
 (* Comme on a défini concat par récursion sur le premier paramètre, il va falloir une induction... *)
-Lemma concat_nil_r : False
+Lemma concat_nil_r : forall (l1:nlist), concat l1 [] = l1 -> True.
 Proof.
+induction l1 as [ | l10 H1].
+-simpl.
+reflexivity.
+-simpl.
+reflexivity.
 Qed.
 
