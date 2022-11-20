@@ -186,6 +186,17 @@ Qed.
 
 Theorem exercice_6b : (~F -> S) -> (S -> T) -> (F -> ~A) -> (~A -> T) -> T.
 Proof.
+intro h0.
+intro h1.
+intro h2.
+intro h3.
+destruct (Tiers_exclus (F)) as [h4 | h5].
+-apply h3.
+apply h2.
+assumption.
+-apply h1.
+apply h0.
+assumption.
 Qed.
 
 
@@ -194,4 +205,14 @@ Theorem exercice_6c: (~~P -> P) /\ (P -> ~~P).
 (* Pour l'un des deux sens on aura besoin du tiers-exclu et, en remarquant qu'on peut déduire False des hypothèses, de la simplification "exfalso". *)
 
 Proof.
+split.
+-intro h0.
+destruct (Tiers_exclus (P)) as [h1 | h2].
++assumption.
++exfalso.
+contradiction.
+-intro h0.
+unfold not.
+intro h1.
+contradiction.
 Qed.

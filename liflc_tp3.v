@@ -63,14 +63,20 @@ Theorem appartient_seulement : forall(x:nat), forall(l:nlist), appartient x l = 
 Proof.
 intro x.
 intro l.
+induction l.
+-
 intro h0.
-induction l as [ | n l0].
--exists [].
 exists [].
-simpl.
+exists [].
 discriminate.
--destruct IHl0.
-+simpl in h0.
+-intro h1.
+exists [].
+exists l.
+simpl.
+destruct IHl.
++rewrite <- h1.
+simpl.
+rewrite <- h1.
 Qed.
 
     
